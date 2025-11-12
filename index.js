@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
@@ -15,24 +16,24 @@ app.use(cors({
   ]
 }));
 
-// Nodemailer Transporter mit IONOS-SMTP
+// Brevo SMTP Transporter
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.ionos.de",
-  port: process.env.SMTP_PORT || 587,
-  secure: false, // STARTTLS bei Port 587
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false, // STARTTLS
   auth: {
-    user: process.env.SMTP_USER, // z.B. info@fcbadenia.de
-    pass: process.env.SMTP_PASS  // dein Mailpasswort
+    user: process.env.BREVO_USER, // deine Brevo Login-E-Mail
+    pass: process.env.BREVO_PASS  // dein generierter SMTP-Schlüssel
   }
 });
 
-// Route für Formular-Submit
+// Formular-Route für Kündigung
 app.post("/submit", async (req, res) => {
   const { mitglied_vorname, mitglied_nachname, email } = req.body;
 
   try {
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: "mitglieder@fc-badenia-stilgen.de", // deine Vereinsadresse (nach Domain-Verifizierung bei Brevo)
       to: email,
       subject: "Kündigungsbestätigung",
       text: `Hallo ${mitglied_vorname} ${mitglied_nachname},\n\nIhre Kündigung ist eingegangen.\n\nSportliche Grüße,\nFC Badenia St. Ilgen`
@@ -49,10 +50,10 @@ app.post("/submit", async (req, res) => {
 app.get("/testmail", async (req, res) => {
   try {
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: process.env.SMTP_USER, // Test an dich selbst
-      subject: "Testmail vom FC Badenia Backend",
-      text: "Dies ist eine Testmail, um den SMTP-Versand zu prüfen."
+      from: "info@fcbadenia.de",
+      to: process.env.BREVO_USER, // Test an dich selbst
+      subject: "Testmail über Brevo",
+      text: "Dies ist eine Testmail über Brevo SMTP."
     });
 
     res.json({ ok: true, message: "Testmail gesendet." });
