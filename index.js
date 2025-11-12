@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -16,32 +16,26 @@ app.use(cors({
   ]
 }));
 
-// Brevo SMTP Transporter
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false, // STARTTLS
-  auth: {
-    user: process.env.BREVO_USER, // deine Brevo Login-E-Mail
-    pass: process.env.BREVO_PASS  // dein generierter SMTP-Schlüssel
-  }
-});
-
 // Formular-Route für Kündigung
 app.post("/submit", async (req, res) => {
   const { mitglied_vorname, mitglied_nachname, email } = req.body;
 
   try {
-    await transporter.sendMail({
-      from: "mitglieder@fc-badenia-stilgen.de", // deine Vereinsadresse (nach Domain-Verifizierung bei Brevo)
-      to: email,
+    await axios.post("https://api.brevo.com/v3/smtp/email", {
+      sender: { email: "mitglieder@fc-badenia-stilgen.de" }, // deine Vereinsadresse (nach Domain-Verifizierung)
+      to: [{ email }],
       subject: "Kündigungsbestätigung",
-      text: `Hallo ${mitglied_vorname} ${mitglied_nachname},\n\nIhre Kündigung ist eingegangen.\n\nSportliche Grüße,\nFC Badenia St. Ilgen`
+      textContent: `Hallo ${mitglied_vorname} ${mitglied_nachname},\n\nIhre Kündigung ist eingegangen.\n\nSportliche Grüße,\nFC Badenia St. Ilgen`
+    }, {
+      headers: {
+        "api-key": process.env.BREVO_API_KEY,
+        "Content-Type": "application/json"
+      }
     });
 
     res.json({ ok: true, message: "Bestätigungsmail gesendet." });
   } catch (err) {
-    console.error("❌ Fehler beim Mailversand:", err);
+    console.error("❌ Fehler beim Mailversand:", err.response?.data || err.message);
     res.status(500).json({ ok: false, message: "Fehler beim Mailversand." });
   }
 });
@@ -49,16 +43,21 @@ app.post("/submit", async (req, res) => {
 // Test-Route für Mailversand
 app.get("/testmail", async (req, res) => {
   try {
-    await transporter.sendMail({
-      from: "info@fcbadenia.de",
-      to: process.env.BREVO_USER, // Test an dich selbst
-      subject: "Testmail über Brevo",
-      text: "Dies ist eine Testmail über Brevo SMTP."
+    await axios.post("https://api.brevo.com/v3/smtp/email", {
+      sender: { email: "info@fcbadenia.de" },
+      to: [{ email: process.env.BREVO_USER }], // Test an dich selbst
+      subject: "Testmail über Brevo API",
+      textContent: "Dies ist eine Testmail über die Brevo API."
+    }, {
+      headers: {
+        "api-key": process.env.BREVO_API_KEY,
+        "Content-Type": "application/json"
+      }
     });
 
     res.json({ ok: true, message: "Testmail gesendet." });
   } catch (err) {
-    console.error("❌ Fehler bei Testmail:", err);
+    console.error("❌ Fehler bei Testmail:", err.response?.data || err.message);
     res.status(500).json({ ok: false, message: "Fehler bei Testmail." });
   }
 });
