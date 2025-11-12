@@ -2,186 +2,95 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Kündigungsformular</title>
-  <link rel="icon" type="image/png" href="https://www.fc-badenia-stilgen.de/s/cc_images/cache_18086476.png?t=1618320486">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kündigungsformular FC Badenia St. Ilgen</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 1em;
-      background-color: #fff;
-      color: #000;
-    }
-    form {
-      max-width: 380px;
-      margin: auto;
-      background-color: #fff;
-      border: 2px solid #cc0000;
-      padding: 2em;
+      background: #f4f4f9;
+      color: #333;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
       border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1, h2 {
-      color: #cc0000;
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 1em;
-    }
-    input[type="text"],
-    input[type="date"],
-    input[type="email"],
-    input[type="tel"],
-    textarea {
-      width: 100%;
-      padding: 0.6em;
-      margin-top: 0.3em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1em;
-      font-family: Arial, sans-serif;
-      box-sizing: border-box;
-    }
-    textarea {
-      resize: none;
+    h1 { color: #004080; text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input, textarea, button {
+      width: 100%; padding: 8px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 4px;
     }
     button {
-      width: 100%;
-      background-color: #cc0000;
-      color: #fff;
-      border: none;
-      padding: 0.8em;
-      margin-top: 2em;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 4px;
+      background: #004080; color: #fff; font-weight: bold;
+      cursor: pointer; margin-top: 20px;
     }
-    button:hover {
-      background-color: #a00000;
-    }
-    #feedback {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 2em;
-      color: green;
-    }
-    .logo-container {
-      text-align: center;
-      margin-bottom: 1em;
-    }
-    .logo-container img {
-      max-width: 150px;
-      height: auto;
-    }
+    button:hover { background: #0066cc; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
+  <h1>Kündigung FC Badenia St. Ilgen</h1>
+  <form id="form">
+    <label>Vorname: <input name="mitglied_vorname" required></label>
+    <label>Nachname: <input name="mitglied_nachname" required></label>
+    <label>Geburtsdatum: <input type="date" name="geburtsdatum" id="geburtsdatum" required></label>
+    <label>E-Mail: <input type="email" name="email" required></label>
+    <label>Mobilnummer: <input name="mobilnummer" required></label>
+    <label>Kündigungsdatum: <input type="date" name="kuendigungsdatum" required></label>
+    <label>Grund: <textarea name="grund"></textarea></label>
 
-   <form id="kuendigungForm">
-   <div class="logo-container">
-    <img src="https://www.fc-badenia-stilgen.de/s/cc_images/cache_18086476.png?t=1618320486"
-         alt="FC Badenia St. Ilgen Logo">
-  </div>
-
-  <h1>Kündigungsformular</h1>
-
-  <h2>Angaben zum Mitglied</h2>
-    <label>Vorname:
-      <input type="text" name="mitglied_vorname" required>
-    </label>
-    <label>Nachname:
-      <input type="text" name="mitglied_nachname" required>
-    </label>
-    <label>Geburtsdatum:
-      <input type="date" id="geburtsdatum" name="geburtsdatum" required>
-    </label>
-
-  <!-- Container für Erziehungsberechtigte -->
-  <div id="elternContainer" style="display:none; margin-top:1em;">
-    <h2>Angaben zum Erziehungsberechtigten</h2>
-    <label>Vorname:
-      <input type="text" name="eltern_vorname">
-    </label>
-    <label>Nachname:
-      <input type="text" name="eltern_nachname">
-    </label>
-  </div>
-
-  <h2>Kontaktdaten</h2>
-    <label>E-Mail:
-      <input type="email" name="email" required>
-    </label>
-    <label>Mobilnummer:
-      <input type="tel" name="mobilnummer"
-             pattern="^(\+\d{1,3}[\s-]?)?\d{6,15}$"
-             title="Bitte geben Sie eine gültige Telefonnummer ein."
-             required>
-    </label>
-
-  <h2>Kündigungsdetails</h2>
-    <label>Kündigungsdatum:
-      <input type="date" name="kuendigungsdatum" required>
-    </label>
-    <label>Grund der Kündigung (optional):
-      <textarea name="grund" rows="4"></textarea>
-    </label>
+    <div id="elternfelder" class="hidden">
+      <h3>Erziehungsberechtigte</h3>
+      <label>Name Erziehungsberechtigte/r: <input name="eltern_name"></label>
+      <label>E-Mail Erziehungsberechtigte/r: <input type="email" name="eltern_email"></label>
+    </div>
 
     <button type="submit">Kündigung absenden</button>
   </form>
 
-  <div id="feedback"></div>
-
   <script>
-    const form = document.getElementById("kuendigungForm");
-    const feedback = document.getElementById("feedback");
-    const button = form.querySelector("button");
     const geburtsdatumInput = document.getElementById("geburtsdatum");
-    const elternContainer = document.getElementById("elternContainer");
+    const elternfelder = document.getElementById("elternfelder");
 
-    // Altersprüfung für Erziehungsberechtigte
-    geburtsdatumInput.addEventListener("change", function() {
-      const geburtsdatum = new Date(this.value);
-      if (!isNaN(geburtsdatum)) {
-        const heute = new Date();
-        let alter = heute.getFullYear() - geburtsdatum.getFullYear();
-        const m = heute.getMonth() - geburtsdatum.getMonth();
-        if (m < 0 || (m === 0 && heute.getDate() < geburtsdatum.getDate())) {
-          alter--;
-        }
-
-        if (alter < 18) {
-          elternContainer.style.display = "block";
-          elternContainer.querySelectorAll("input").forEach(inp => inp.required = true);
-        } else {
-          elternContainer.style.display = "none";
-          elternContainer.querySelectorAll("input").forEach(inp => inp.required = false);
-        }
+    geburtsdatumInput.addEventListener("change", () => {
+      const geburtsdatum = new Date(geburtsdatumInput.value);
+      const heute = new Date();
+      let alter = heute.getFullYear() - geburtsdatum.getFullYear();
+      const m = heute.getMonth() - geburtsdatum.getMonth();
+      if (m < 0 || (m === 0 && heute.getDate() < geburtsdatum.getDate())) alter--;
+      if (alter < 18) {
+        elternfelder.classList.remove("hidden");
+        elternfelder.querySelectorAll("input").forEach(i => i.required = true);
+      } else {
+        elternfelder.classList.add("hidden");
+        elternfelder.querySelectorAll("input").forEach(i => i.required = false);
       }
     });
 
-    // Formular absenden
-    form.addEventListener("submit", function(e) {
+    document.getElementById("form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
-      button.textContent = "Wird gesendet...";
+      const data = Object.fromEntries(new FormData(e.target).entries());
 
-      fetch("https://script.google.com/macros/s/DEINE_SCRIPT_ID/exec", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.text())
-      .then(data => {
-        feedback.textContent = "✅ Bitte prüfen Sie Ihr Postfach und bestätigen Sie die Kündigung über den zugesandten Link.";
-        form.reset();
-        button.textContent = "Kündigung absenden";
-      })
-      .catch(error => {
-        feedback.textContent = "❌ Fehler beim Senden der Daten.";
-        button.textContent = "Kündigung absenden";
-        console.error("Fehler:", error);
-      });
+      try {
+        console.log("📤 Sende Daten an Backend:", data);
+        const res = await fetch("https://kuendigung.onrender.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        console.log("📥 Antwortstatus:", res.status);
+        const result = await res.json();
+        console.log("📥 Antwortdaten:", result);
+
+        alert(result.message || "Anfrage gesendet.");
+      } catch (err) {
+        console.error("❌ Fehler beim Absenden:", err);
+        alert("Fehler beim Absenden. Details siehe Konsole.");
+      }
     });
   </script>
-
 </body>
 </html>
+
