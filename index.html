@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Kündigungsformular</title>
+  <link rel="icon" type="image/png" href="https://www.fc-badenia-stilgen.de/s/cc_images/cache_18086476.png?t=1618320486">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 1em;
+      background-color: #fff;
+      color: #000;
+    }
+    form {
+      max-width: 380px;
+      margin: auto;
+      background-color: #fff;
+      border: 2px solid #cc0000;
+      padding: 2em;
+      border-radius: 8px;
+    }
+    h1, h2 {
+      color: #cc0000;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.3em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: none;
+    }
+    button {
+      width: 100%;
+      background-color: #cc0000;
+      color: #fff;
+      border: none;
+      padding: 0.8em;
+      margin-top: 2em;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #a00000;
+    }
+    #feedback {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 2em;
+      color: green;
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    .logo-container img {
+      max-width: 150px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+   <form id="kuendigungForm">
+   <div class="logo-container">
+    <img src="https://www.fc-badenia-stilgen.de/s/cc_images/cache_18086476.png?t=1618320486"
+         alt="FC Badenia St. Ilgen Logo">
+  </div>
+
+  <h1>Kündigungsformular</h1>
+
+  <h2>Angaben zum Mitglied</h2>
+    <label>Vorname:
+      <input type="text" name="mitglied_vorname" required>
+    </label>
+    <label>Nachname:
+      <input type="text" name="mitglied_nachname" required>
+    </label>
+    <label>Geburtsdatum:
+      <input type="date" id="geburtsdatum" name="geburtsdatum" required>
+    </label>
+
+  <!-- Container für Erziehungsberechtigte -->
+  <div id="elternContainer" style="display:none; margin-top:1em;">
+    <h2>Angaben zum Erziehungsberechtigten</h2>
+    <label>Vorname:
+      <input type="text" name="eltern_vorname">
+    </label>
+    <label>Nachname:
+      <input type="text" name="eltern_nachname">
+    </label>
+  </div>
+
+  <h2>Kontaktdaten</h2>
+    <label>E-Mail:
+      <input type="email" name="email" required>
+    </label>
+    <label>Mobilnummer:
+      <input type="tel" name="mobilnummer"
+             pattern="^(\+\d{1,3}[\s-]?)?\d{6,15}$"
+             title="Bitte geben Sie eine gültige Telefonnummer ein."
+             required>
+    </label>
+
+  <h2>Kündigungsdetails</h2>
+    <label>Kündigungsdatum:
+      <input type="date" name="kuendigungsdatum" required>
+    </label>
+    <label>Grund der Kündigung (optional):
+      <textarea name="grund" rows="4"></textarea>
+    </label>
+
+    <button type="submit">Kündigung absenden</button>
+  </form>
+
+  <div id="feedback"></div>
+
+  <script>
+    const form = document.getElementById("kuendigungForm");
+    const feedback = document.getElementById("feedback");
+    const button = form.querySelector("button");
+    const geburtsdatumInput = document.getElementById("geburtsdatum");
+    const elternContainer = document.getElementById("elternContainer");
+
+    // Altersprüfung für Erziehungsberechtigte
+    geburtsdatumInput.addEventListener("change", function() {
+      const geburtsdatum = new Date(this.value);
+      if (!isNaN(geburtsdatum)) {
+        const heute = new Date();
+        let alter = heute.getFullYear() - geburtsdatum.getFullYear();
+        const m = heute.getMonth() - geburtsdatum.getMonth();
+        if (m < 0 || (m === 0 && heute.getDate() < geburtsdatum.getDate())) {
+          alter--;
+        }
+
+        if (alter < 18) {
+          elternContainer.style.display = "block";
+          elternContainer.querySelectorAll("input").forEach(inp => inp.required = true);
+        } else {
+          elternContainer.style.display = "none";
+          elternContainer.querySelectorAll("input").forEach(inp => inp.required = false);
+        }
+      }
+    });
+
+    // Formular absenden
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      button.textContent = "Wird gesendet...";
+
+      fetch("https://script.google.com/macros/s/DEINE_SCRIPT_ID/exec", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        feedback.textContent = "✅ Bitte prüfen Sie Ihr Postfach und bestätigen Sie die Kündigung über den zugesandten Link.";
+        form.reset();
+        button.textContent = "Kündigung absenden";
+      })
+      .catch(error => {
+        feedback.textContent = "❌ Fehler beim Senden der Daten.";
+        button.textContent = "Kündigung absenden";
+        console.error("Fehler:", error);
+      });
+    });
+  </script>
+
+</body>
+</html>
