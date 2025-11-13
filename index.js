@@ -99,8 +99,8 @@ app.get("/verify", async (req, res) => {
   }
 
   try {
-    // Admin-Mailtext mit klarer Struktur
-    let adminText = `Kündigung eingegangen:\n\n`;
+    // Admin-Mailtext hübsch formatiert
+    let adminText = `✅ Kündigung bestätigt\n\n`;
     adminText += `--- Mitgliedsdaten ---\n`;
     adminText += `Name: ${data.vorname} ${data.nachname}\n`;
     adminText += `Geburtsdatum: ${data.geburtsdatum} (Alter: ${data.alter})\n\n`;
@@ -121,9 +121,28 @@ app.get("/verify", async (req, res) => {
 
     await axios.post("https://api.brevo.com/v3/smtp/email", {
       sender: { email: "mitglieder@fc-badenia-stilgen.de" },
-      to: [{ email: "mitglieder@fc-badenia-stilgen.de" }], // Admin-Adresse
+      to: [
+        { email: data.email } // Anwender bekommt die Admin-Mail auch
+      ],
+      cc: [
+        { email: "mitglieder@fc-badenia-stilgen.de" } // Verein bekommt Kopie
+      ],
       subject: `Kündigung von ${data.vorname} ${data.nachname}`,
-      textContent: adminText
+      textContent: adminText,
+      htmlContent: `
+        <h2>✅ Kündigung bestätigt</h2>
+        <h3>Mitgliedsdaten</h3>
+        <p><strong>Name:</strong> ${data.vorname} ${data.nachname}<br>
+        <strong>Geburtsdatum:</strong> ${data.geburtsdatum} (Alter: ${data.alter})</p>
+
+        <h3>Kontakt</h3>
+        <p><strong>E-Mail:</strong> ${data.email}<br>
+        <strong>Telefon:</strong> ${data.telefon || "-"}</p>
+
+        ${data.alter < 18 ? `<h3>Erziehungsberechtigter</h3><p>${data.elternName || "-"}</p>` : ""}
+
+        ${data.bemerkung ? `<h3>Bemerkung</h3><p>${data.bemerkung}</p>` : ""}
+      `
     }, {
       headers: {
         "api-key": process.env.BREVO_API_KEY,
@@ -131,7 +150,7 @@ app.get("/verify", async (req, res) => {
       }
     });
 
-    res.send("✅ Die E-Mailadresse wurde bestätigt. Wir bearbeiten die Kündigung manuell.");
+    res.send("✅ Die E-Mailadresse wurde bestätigt. Admin-Mail wurde verschickt.");
   } catch (err) {
     console.error("❌ Fehler beim Admin-Mailversand:", err.response?.data || err.message);
     res.status(500).send("Fehler beim Admin-Mailversand.");
@@ -141,4 +160,3 @@ app.get("/verify", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server läuft auf Port ${PORT}`);
 });
-
