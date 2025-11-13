@@ -120,7 +120,7 @@ app.get("/verify", async (req, res) => {
     }
 
     await axios.post("https://api.brevo.com/v3/smtp/email", {
-      sender: { email: "kuendigung@fc-badenia-stilgen.de" },
+      sender: { email: "mitglieder@fc-badenia-stilgen.de" },
       to: [{ email: "mitglieder@fc-badenia-stilgen.de" }], // Admin-Adresse
       subject: `Kündigung von ${data.vorname} ${data.nachname}`,
       textContent: adminText
@@ -141,3 +141,4 @@ app.get("/verify", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server läuft auf Port ${PORT}`);
 });
+
