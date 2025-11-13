@@ -44,7 +44,6 @@ app.post("/submit", async (req, res) => {
   tokens.set(token, { vorname: mitglied_vorname, nachname: mitglied_nachname, geburtsdatum, email, telefon, bemerkung, elternName, alter });
 
   try {
-    // Bestätigungsmail mit HTML-Link + Fallback
     let empfaengerText = alter < 18 ? (elternName || "Erziehungsberechtigter") : mitglied_vorname;
     const verifyLink = `https://kuendigung.onrender.com/verify?token=${token}`;
 
@@ -99,7 +98,6 @@ app.get("/verify", async (req, res) => {
   }
 
   try {
-    // Admin-Mailtext mit freundlicher Bestätigung
     let adminText = `✅ Wir haben Ihre Kündigung erhalten und werden sie schnellstmöglich bestätigen.\n\n`;
     adminText += `--- Mitgliedsdaten ---\n`;
     adminText += `Name: ${data.vorname} ${data.nachname}\n`;
