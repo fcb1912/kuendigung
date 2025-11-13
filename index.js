@@ -99,8 +99,8 @@ app.get("/verify", async (req, res) => {
   }
 
   try {
-    // Admin-Mailtext hübsch formatiert
-    let adminText = `✅ Kündigung bestätigt\n\n`;
+    // Admin-Mailtext mit freundlicher Bestätigung
+    let adminText = `✅ Wir haben Ihre Kündigung erhalten und werden sie schnellstmöglich bestätigen.\n\n`;
     adminText += `--- Mitgliedsdaten ---\n`;
     adminText += `Name: ${data.vorname} ${data.nachname}\n`;
     adminText += `Geburtsdatum: ${data.geburtsdatum} (Alter: ${data.alter})\n\n`;
@@ -122,7 +122,7 @@ app.get("/verify", async (req, res) => {
     await axios.post("https://api.brevo.com/v3/smtp/email", {
       sender: { email: "mitglieder@fc-badenia-stilgen.de" },
       to: [
-        { email: data.email } // Anwender bekommt die Admin-Mail auch
+        { email: data.email } // Anwender bekommt die Bestätigung
       ],
       cc: [
         { email: "mitglieder@fc-badenia-stilgen.de" } // Verein bekommt Kopie
@@ -130,7 +130,9 @@ app.get("/verify", async (req, res) => {
       subject: `Kündigung von ${data.vorname} ${data.nachname}`,
       textContent: adminText,
       htmlContent: `
-        <h2>✅ Kündigung bestätigt</h2>
+        <h2>✅ Wir haben Ihre Kündigung erhalten</h2>
+        <p>Wir werden sie schnellstmöglich bestätigen.</p>
+
         <h3>Mitgliedsdaten</h3>
         <p><strong>Name:</strong> ${data.vorname} ${data.nachname}<br>
         <strong>Geburtsdatum:</strong> ${data.geburtsdatum} (Alter: ${data.alter})</p>
