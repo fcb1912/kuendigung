@@ -2,9 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const crypto = require("crypto");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
+
+// Speicher für Tokens (später DB möglich)
+const tokens = new Map();
 
 app.use(express.json());
 app.use(cors({
@@ -15,16 +19,61 @@ app.use(cors({
   ]
 }));
 
-// Kündigungsformular-Route
+// Hilfsfunktion: Alter berechnen
+function berechneAlter(geburtsdatum) {
+  const heute = new Date();
+  const geb = new Date(geburtsdatum);
+  let alter = heute.getFullYear() - geb.getFullYear();
+  const m = heute.getMonth() - geb.getMonth();
+  if (m < 0 || (m === 0 && heute.getDate() < geb.getDate())) {
+    alter--;
+  }
+  return alter;
+}
+
+// Formular-Route
 app.post("/submit", async (req, res) => {
-  const { mitglied_vorname, mitglied_nachname, email } = req.body;
+  const { mitglied_vorname, mitglied_nachname, geburtsdatum, email, telefon, bemerkung, elternName } = req.body;
+
+  if (!email || email.trim() === "") {
+    return res.status(400).json({ ok: false, message: "Keine gültige E-Mailadresse angegeben." });
+  }
+
+  const alter = berechneAlter(geburtsdatum);
+  const token = crypto.randomUUID();
+  tokens.set(token, { vorname: mitglied_vorname, nachname: mitglied_nachname, geburtsdatum, email, telefon, bemerkung, elternName, alter });
 
   try {
+    // Bestätigungsmail mit HTML-Link + Fallback
+    let empfaengerText = alter < 18 ? (elternName || "Erziehungsberechtigter") : mitglied_vorname;
+    const verifyLink = `https://kuendigung.onrender.com/verify?token=${token}`;
+
     await axios.post("https://api.brevo.com/v3/smtp/email", {
-      sender: { email: "mitglieder@fc-badenia-stilgen.de" }, // neue Vereinsadresse
+      sender: { email: "mitglieder@fc-badenia-stilgen.de" },
       to: [{ email }],
-      subject: "Kündigungsbestätigung",
-      textContent: `Hallo ${mitglied_vorname} ${mitglied_nachname},\n\nIhre Kündigung ist eingegangen.\n\nSportliche Grüße,\nFC Badenia St. Ilgen`
+      subject: "Bitte bestätigen Sie die Kündigung",
+      textContent: `Hallo ${empfaengerText},
+
+Bitte bestätigen Sie die Kündigung von ${mitglied_vorname} ${mitglied_nachname}.
+Hier der Bestätigungslink (kopieren Sie ihn in den Browser, falls er nicht anklickbar ist):
+${verifyLink}
+
+Sportliche Grüße,
+FC Badenia St. Ilgen`,
+      htmlContent: `
+        <p>Hallo ${empfaengerText},</p>
+        <p>Bitte bestätigen Sie die Kündigung von <strong>${mitglied_vorname} ${mitglied_nachname}</strong>.</p>
+        <p>
+          <a href="${verifyLink}" 
+             style="display:inline-block;padding:10px 14px;background:#003366;color:#fff;text-decoration:none;border-radius:4px;">
+            Kündigung bestätigen
+          </a>
+        </p>
+        <p>Falls der Button nicht funktioniert, nutzen Sie diesen Link:<br>
+          <a href="${verifyLink}">${verifyLink}</a>
+        </p>
+        <p>Sportliche Grüße,<br>FC Badenia St. Ilgen</p>
+      `
     }, {
       headers: {
         "api-key": process.env.BREVO_API_KEY,
@@ -32,6 +81,7 @@ app.post("/submit", async (req, res) => {
       }
     });
 
+    console.log("Verify-Link:", verifyLink);
     res.json({ ok: true, message: "Bestätigungsmail gesendet." });
   } catch (err) {
     console.error("❌ Fehler beim Mailversand:", err.response?.data || err.message);
@@ -39,14 +89,41 @@ app.post("/submit", async (req, res) => {
   }
 });
 
-// Test-Route für Mailversand
-app.get("/testmail", async (req, res) => {
+// Verify-Route
+app.get("/verify", async (req, res) => {
+  const { token } = req.query;
+  const data = tokens.get(token);
+
+  if (!data) {
+    return res.status(400).send("❌ Ungültiger oder abgelaufener Link.");
+  }
+
   try {
+    // Admin-Mailtext mit klarer Struktur
+    let adminText = `Kündigung eingegangen:\n\n`;
+    adminText += `--- Mitgliedsdaten ---\n`;
+    adminText += `Name: ${data.vorname} ${data.nachname}\n`;
+    adminText += `Geburtsdatum: ${data.geburtsdatum} (Alter: ${data.alter})\n\n`;
+
+    adminText += `--- Kontakt ---\n`;
+    adminText += `E-Mail: ${data.email}\n`;
+    adminText += `Telefon: ${data.telefon || "-"}\n\n`;
+
+    if (data.alter < 18) {
+      adminText += `--- Erziehungsberechtigter ---\n`;
+      adminText += `${data.elternName || "-"}\n\n`;
+    }
+
+    if (data.bemerkung) {
+      adminText += `--- Bemerkung ---\n`;
+      adminText += `${data.bemerkung}\n\n`;
+    }
+
     await axios.post("https://api.brevo.com/v3/smtp/email", {
-      sender: { email: "mitglieder@fc-badenia-stilgen.de" }, // neue Vereinsadresse
-      to: [{ email: process.env.BREVO_USER }],
-      subject: "Testmail über Brevo API",
-      textContent: "Dies ist eine Testmail über die Brevo API mit der neuen Absenderadresse."
+      sender: { email: "mitglieder@fc-badenia-stilgen.de" },
+      to: [{ email: "vorstand@fc-badenia-stilgen.de" }], // Admin-Adresse
+      subject: `Kündigung von ${data.vorname} ${data.nachname}`,
+      textContent: adminText
     }, {
       headers: {
         "api-key": process.env.BREVO_API_KEY,
@@ -54,10 +131,10 @@ app.get("/testmail", async (req, res) => {
       }
     });
 
-    res.json({ ok: true, message: "Testmail gesendet." });
+    res.send("✅ Die E-Mailadresse wurde bestätigt. Wir bearbeiten die Kündigung manuell.");
   } catch (err) {
-    console.error("❌ Fehler bei Testmail:", err.response?.data || err.message);
-    res.status(500).json({ ok: false, message: "Fehler bei Testmail." });
+    console.error("❌ Fehler beim Admin-Mailversand:", err.response?.data || err.message);
+    res.status(500).send("Fehler beim Admin-Mailversand.");
   }
 });
 
