@@ -1,327 +1,232 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kündigung FC Badenia St. Ilgen — Bestätigungscode</title>
-  <style>
-    :root {
-      --rot: #b30000;
-      --weiß: #ffffff;
-      --grau: #f5f5f5;
-      --text: #222;
-    }
-    * { box-sizing: border-box; }
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      margin: 0;
-      background: var(--grau);
-      color: var(--text);
-      padding: 1rem;
-    }
-    header {
-      background: var(--rot);
-      color: var(--weiß);
-      padding: 1rem;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:1rem;
-      border-radius:6px;
-    }
-    header img { height:42px }
-    main {
-      max-width:680px;
-      margin:1.25rem auto;
-      background:var(--weiß);
-      padding:1.25rem;
-      border-radius:8px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.06);
-    }
-    h1 { margin:0 0 0.5rem 0; font-size:1.25rem; }
-    label { display:block; margin-top:0.9rem; font-weight:600; font-size:0.95rem; }
-    input, textarea, button {
-      width:100%;
-      padding:0.6rem;
-      margin-top:0.3rem;
-      border:1px solid #d0d0d0;
-      border-radius:6px;
-      font-size:1rem;
-      font-family:inherit;
-    }
-    textarea { resize:vertical; min-height:84px; }
-    button.primary {
-      margin-top:1rem;
-      background:var(--rot);
-      color:var(--weiß);
-      border:none;
-      cursor:pointer;
-      padding:0.85rem;
-      font-weight:600;
-    }
-    .muted { color:#666; font-size:0.95rem; margin-top:0.5rem; }
-    #feedback, #codeFeedback {
-      margin-top:1rem;
-      padding:0.85rem;
-      border-radius:6px;
-      display:none;
-      font-weight:600;
-    }
-    #feedback.success { background:#e6ffe6; border:1px solid #66cc66; color:#006600; display:block; }
-    #feedback.error { background:#ffe6e6; border:1px solid #cc6666; color:#660000; display:block; }
-    .center { text-align:center; }
-    .small { font-size:0.9rem; color:#555; margin-top:0.5rem; }
-
-    /* small screens adjustments */
-    @media (max-width:520px) {
-      main { padding:1rem; }
-      header h1 { font-size:1rem; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Kündigung FC Badenia St. Ilgen — Bestätigungscode</title>
+<style>
+  :root {
+    --rot: #b30000;
+    --weiß: #ffffff;
+    --grau: #f5f5f5;
+    --text: #222;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    margin: 0; background: var(--grau); color: var(--text); padding: 1rem;
+  }
+  header {
+    background: var(--rot); color: var(--weiß); padding: 1rem;
+    display:flex; align-items:center; justify-content:center; gap:1rem; border-radius:6px;
+  }
+  header img { height:42px }
+  main {
+    max-width:680px; margin:1.25rem auto; background:var(--weiß); padding:1.25rem;
+    border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.06);
+  }
+  h1,h2 { margin:0 0 0.5rem 0; }
+  h1 { font-size:1.25rem; }
+  label { display:block; margin-top:0.9rem; font-weight:600; font-size:0.95rem; }
+  input, textarea, button {
+    width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #d0d0d0;
+    border-radius:6px; font-size:1rem; font-family:inherit;
+  }
+  textarea { resize:vertical; min-height:84px; }
+  button.primary {
+    margin-top:1rem; background:var(--rot); color:var(--weiß);
+    border:none; cursor:pointer; padding:0.85rem; font-weight:600;
+  }
+  .muted { color:#666; font-size:0.95rem; margin-top:0.5rem; }
+  .feedback { display:none; font-weight:600; padding:0.85rem; border-radius:6px; margin-top:1rem; }
+  .feedback.success { background:#e6ffe6; border:1px solid #66cc66; color:#006600; display:block; }
+  .feedback.error { background:#ffe6e6; border:1px solid #cc6666; color:#660000; display:block; }
+  .center { text-align:center; }
+  .small { font-size:0.9rem; color:#555; margin-top:0.5rem; }
+  @media (max-width:520px) { main { padding:1rem; } }
+</style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="FC Badenia Logo" onerror="this.style.display='none'"/>
-    <h1>Kündigung FC Badenia St. Ilgen</h1>
-  </header>
+<header>
+  <img src="logo.png" alt="FC Badenia Logo" onerror="this.style.display='none'"/>
+  <h1>Kündigung FC Badenia St. Ilgen</h1>
+</header>
 
-  <main>
-    <!-- Schritt 1: Formular -->
-    <section id="stepForm">
-      <h2>Kündigungsformular</h2>
+<main>
+  <!-- Schritt 1: Formular -->
+  <section id="stepForm">
+    <h2>Kündigungsformular</h2>
+    <form id="kuendigungForm" autocomplete="off">
+      <label for="vorname">Vorname Mitglied</label>
+      <input id="vorname" name="vorname" type="text" required>
+      <label for="nachname">Name Mitglied</label>
+      <input id="nachname" name="nachname" type="text" required>
+      <label for="geburtsdatum">Geburtsdatum</label>
+      <input id="geburtsdatum" name="geburtsdatum" type="date" required>
+      <label id="elternLabel" style="display:none;">Erziehungsberechtigte Person</label>
+      <input id="elternName" name="elternName" type="text" style="display:none;">
+      <label for="email">E-Mail</label>
+      <input id="email" name="email" type="email" required>
+      <label for="telefon">Telefon</label>
+      <input id="telefon" name="telefon" type="tel" required>
+      <label for="bemerkung">Bemerkung (optional)</label>
+      <textarea id="bemerkung" name="bemerkung" rows="3"></textarea>
+      <div class="small">Nach Absenden erhalten Sie einen 6-stelligen Bestätigungscode per E-Mail.</div>
+      <button class="primary" type="submit">Kündigung absenden</button>
+    </form>
+    <div id="feedback" class="feedback" role="status"></div>
+  </section>
 
-      <form id="kuendigungForm" autocomplete="off">
-        <label for="vorname">Vorname Mitglied</label>
-        <input id="vorname" name="vorname" type="text" required>
+  <!-- Schritt 2: Code Eingabe -->
+  <section id="stepCode" style="display:none;">
+    <h2>Bestätigungscode eingeben</h2>
+    <div class="muted">Wir haben Ihnen per E-Mail einen 6-stelligen Code gesendet. Bitte tragen Sie ihn hier ein.</div>
+    <label for="codeInput">6-stelliger Code</label>
+    <input id="codeInput" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code">
+    <button class="primary" id="verifyBtn" type="button">Code bestätigen</button>
+    <div class="small center" style="margin-top:0.6rem;">
+      <button id="resendBtn" type="button" style="background:#f0f0f0;color:#222;border:none;padding:8px;border-radius:6px;cursor:pointer;">
+        Code nochmals senden
+      </button>
+    </div>
+    <div id="codeFeedback" class="feedback" role="status"></div>
+  </section>
+</main>
 
-        <label for="nachname">Name Mitglied</label>
-        <input id="nachname" name="nachname" type="text" required>
+<script>
+const gebInput = document.getElementById("geburtsdatum");
+const elternLabel = document.getElementById("elternLabel");
+const elternName = document.getElementById("elternName");
+const form = document.getElementById("kuendigungForm");
+const feedback = document.getElementById("feedback");
+const stepForm = document.getElementById("stepForm");
+const stepCode = document.getElementById("stepCode");
+const codeInput = document.getElementById("codeInput");
+const codeFeedback = document.getElementById("codeFeedback");
+const resendBtn = document.getElementById("resendBtn");
+const verifyBtn = document.getElementById("verifyBtn");
 
-        <label for="geburtsdatum">Geburtsdatum</label>
-        <input id="geburtsdatum" name="geburtsdatum" type="date" required>
+function berechneAlter(datum) {
+  const heute = new Date();
+  const geb = new Date(datum);
+  let alter = heute.getFullYear() - geb.getFullYear();
+  const m = heute.getMonth() - geb.getMonth();
+  if (m < 0 || (m === 0 && heute.getDate() < geb.getDate())) alter--;
+  return alter;
+}
 
-        <label id="elternLabel" style="display:none;">Erziehungsberechtigte Person</label>
-        <input id="elternName" name="elternName" type="text" style="display:none;">
+gebInput.addEventListener("change", () => {
+  const alter = berechneAlter(gebInput.value);
+  if (alter < 18) {
+    elternLabel.style.display = "block";
+    elternName.style.display = "block";
+    elternName.required = true;
+  } else {
+    elternLabel.style.display = "none";
+    elternName.style.display = "none";
+    elternName.required = false;
+    elternName.value = "";
+  }
+});
 
-        <label for="email">E-Mail</label>
-        <input id="email" name="email" type="email" required>
-
-        <label for="telefon">Telefon</label>
-        <input id="telefon" name="telefon" type="tel" required>
-
-        <label for="bemerkung">Bemerkung (optional)</label>
-        <textarea id="bemerkung" name="bemerkung" rows="3"></textarea>
-
-        <div class="small">Nach Absenden erhalten Sie einen 6-stelligen Bestätigungscode per E-Mail.</div>
-
-        <button class="primary" type="submit">Kündigung absenden</button>
-      </form>
-
-      <div id="feedback" role="status"></div>
-    </section>
-
-    <!-- Schritt 2: Code Eingabe -->
-    <section id="stepCode" style="display:none;">
-      <h2>Bestätigungscode eingeben</h2>
-      <div class="muted">Wir haben Ihnen per E-Mail einen 6-stelligen Code gesendet. Bitte tragen Sie ihn hier ein, um die Kündigung zu bestätigen.</div>
-
-      <label for="codeInput">6-stelliger Code</label>
-      <input id="codeInput" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code">
-
-      <button class="primary" id="verifyBtn" type="button">Code bestätigen</button>
-
-      <div class="small center" style="margin-top:0.6rem;">
-        <button id="resendBtn" type="button" style="background:#f0f0f0;color:#222;border:none;padding:8px;border-radius:6px;cursor:pointer;">
-          Code nochmals senden
-        </button>
-      </div>
-
-      <div id="codeFeedback" role="status"></div>
-    </section>
-
-  </main>
-
-  <script>
-    // Hilfsfunktionen
-    function berechneAlter(datum) {
-      const heute = new Date();
-      const geb = new Date(datum);
-      let alter = heute.getFullYear() - geb.getFullYear();
-      const m = heute.getMonth() - geb.getMonth();
-      if (m < 0 || (m === 0 && heute.getDate() < geb.getDate())) alter--;
-      return alter;
-    }
-
-    // Elemente
-    const gebInput = document.getElementById("geburtsdatum");
-    const elternLabel = document.getElementById("elternLabel");
-    const elternName = document.getElementById("elternName");
-
-    gebInput.addEventListener("change", function () {
-      const alter = berechneAlter(this.value);
-      if (alter < 18) {
-        elternLabel.style.display = "block";
-        elternName.style.display = "block";
-        elternName.required = true;
-      } else {
-        elternLabel.style.display = "none";
-        elternName.style.display = "none";
-        elternName.required = false;
-        elternName.value = "";
-      }
+async function sendForm(data) {
+  try {
+    const resp = await fetch("/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     });
+    return await resp.json();
+  } catch (err) {
+    console.error(err);
+    return { ok: false, message: "Technischer Fehler. Bitte später erneut versuchen." };
+  }
+}
 
-    const form = document.getElementById("kuendigungForm");
-    const feedback = document.getElementById("feedback");
-    const stepForm = document.getElementById("stepForm");
-    const stepCode = document.getElementById("stepCode");
-    const codeInput = document.getElementById("codeInput");
-    const codeFeedback = document.getElementById("codeFeedback");
-    const resendBtn = document.getElementById("resendBtn");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  feedback.style.display = "none";
+  const btn = form.querySelector("button");
+  btn.disabled = true;
 
-    // Nach dem Absenden: server erstellt Code und sendet E-Mail
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      feedback.style.display = "none";
-      const data = {
-        mitglied_vorname: form.vorname.value.trim(),
-        mitglied_nachname: form.nachname.value.trim(),
-        geburtsdatum: form.geburtsdatum.value,
-        email: form.email.value.trim(),
-        telefon: form.telefon.value.trim(),
-        bemerkung: form.bemerkung.value.trim(),
-        elternName: form.elternName.value.trim()
-      };
+  const data = {
+    mitglied_vorname: form.vorname.value.trim(),
+    mitglied_nachname: form.nachname.value.trim(),
+    geburtsdatum: form.geburtsdatum.value,
+    email: form.email.value.trim(),
+    telefon: form.telefon.value.trim(),
+    bemerkung: form.bemerkung.value.trim(),
+    elternName: form.elternName.value.trim()
+  };
 
-      try {
-        const resp = await fetch("/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
+  const result = await sendForm(data);
+  btn.disabled = false;
 
-        const result = await resp.json();
-        if (result.ok) {
-          // Wechsel zu Schritt 2
-          stepForm.style.display = "none";
-          stepCode.style.display = "block";
-          codeFeedback.textContent = "Ein Code wurde per E-Mail versandt. Gib ihn bitte hier ein.";
-          codeFeedback.style.display = "block";
-          codeFeedback.style.background = "#eaf6ff";
-          codeFeedback.style.color = "#003a6b";
-          codeFeedback.style.padding = "8px";
-          codeFeedback.style.borderRadius = "6px";
-        } else {
-          feedback.className = "error";
-          feedback.textContent = "❌ " + (result.message || "Fehler.");
-          feedback.style.display = "block";
-        }
-      } catch (err) {
-        feedback.className = "error";
-        feedback.textContent = "❌ Technischer Fehler. Bitte später erneut versuchen.";
-        feedback.style.display = "block";
-        console.error(err);
-      }
-    });
+  if (result.ok) {
+    stepForm.style.display = "none";
+    stepCode.style.display = "block";
+    codeFeedback.textContent = "Ein Code wurde per E-Mail versandt. Gib ihn bitte hier ein.";
+    codeFeedback.className = "feedback success";
+    codeInput.focus();
+  } else {
+    feedback.textContent = "❌ " + (result.message || "Fehler.");
+    feedback.className = "feedback error";
+  }
+});
 
-    // Code bestätigen
-    document.getElementById("verifyBtn").addEventListener("click", async () => {
-      const code = codeInput.value.trim();
+verifyBtn.addEventListener("click", async () => {
+  const code = codeInput.value.trim();
+  codeFeedback.style.display = "none";
+  verifyBtn.disabled = true;
+
+  if (!/^[0-9]{6}$/.test(code)) {
+    codeFeedback.textContent = "Bitte gib einen 6-stelligen Code ein.";
+    codeFeedback.className = "feedback error";
+    codeFeedback.style.display = "block";
+    verifyBtn.disabled = false;
+    return;
+  }
+
+  const result = await sendForm({ code }, "/verify-code");
+  verifyBtn.disabled = false;
+
+  if (result.ok) {
+    codeFeedback.textContent = "✅ Kündigung bestätigt. Sie erhalten eine Bestätigungs-E-Mail.";
+    codeFeedback.className = "feedback success";
+    setTimeout(() => {
+      stepCode.style.display = "none";
+      stepForm.style.display = "block";
+      form.reset();
+      elternLabel.style.display = "none";
+      elternName.style.display = "none";
       codeFeedback.style.display = "none";
+    }, 2500);
+  } else {
+    codeFeedback.textContent = "❌ " + (result.message || "Ungültiger Code.");
+    codeFeedback.className = "feedback error";
+  }
+});
 
-      if (!/^[0-9]{6}$/.test(code)) {
-        codeFeedback.style.display = "block";
-        codeFeedback.textContent = "Bitte gib einen 6-stelligen Code ein.";
-        codeFeedback.style.background = "#ffecec";
-        codeFeedback.style.color = "#660000";
-        codeFeedback.style.padding = "8px";
-        codeFeedback.style.borderRadius = "6px";
-        return;
-      }
+resendBtn.addEventListener("click", async () => {
+  resendBtn.disabled = true;
+  const formData = {
+    mitglied_vorname: form.vorname.value.trim(),
+    mitglied_nachname: form.nachname.value.trim(),
+    geburtsdatum: form.geburtsdatum.value,
+    email: form.email.value.trim(),
+    telefon: form.telefon.value.trim(),
+    bemerkung: form.bemerkung.value.trim(),
+    elternName: form.elternName.value.trim(),
+    resend: true
+  };
 
-      try {
-        const resp = await fetch("/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code })
-        });
+  const result = await sendForm(formData);
+  resendBtn.disabled = false;
 
-        const result = await resp.json();
-
-        if (result.ok) {
-          codeFeedback.style.display = "block";
-          codeFeedback.textContent = "✅ Kündigung bestätigt. Sie erhalten eine Bestätigungs-E-Mail.";
-          codeFeedback.style.background = "#e6ffe6";
-          codeFeedback.style.color = "#006600";
-          codeFeedback.style.padding = "8px";
-          codeFeedback.style.borderRadius = "6px";
-          // optional: reset UI
-          setTimeout(() => {
-            stepCode.style.display = "none";
-            stepForm.style.display = "block";
-            form.reset();
-            elternLabel.style.display = "none";
-            elternName.style.display = "none";
-            codeFeedback.style.display = "none";
-          }, 2500);
-        } else {
-          codeFeedback.style.display = "block";
-          codeFeedback.textContent = "❌ " + (result.message || "Ungültiger Code.");
-          codeFeedback.style.background = "#ffecec";
-          codeFeedback.style.color = "#660000";
-          codeFeedback.style.padding = "8px";
-          codeFeedback.style.borderRadius = "6px";
-        }
-      } catch (err) {
-        codeFeedback.style.display = "block";
-        codeFeedback.textContent = "❌ Technischer Fehler beim Prüfen des Codes.";
-        codeFeedback.style.background = "#ffecec";
-        codeFeedback.style.color = "#660000";
-        codeFeedback.style.padding = "8px";
-        codeFeedback.style.borderRadius = "6px";
-      }
-    });
-
-    // Code erneut senden (Resend) — sendet die im Formular zuletzt eingegebenen Daten nochmal
-    resendBtn.addEventListener("click", async () => {
-      // Wir senden die gleichen Felddaten erneut - wenn Formular noch sichtbar war, sind diese vorhanden
-      // Für eine sichere UX: wir sammeln Daten aus dem Formular (falls noch vorhanden)
-      const formData = {
-        mitglied_vorname: form.vorname.value.trim(),
-        mitglied_nachname: form.nachname.value.trim(),
-        geburtsdatum: form.geburtsdatum.value,
-        email: form.email.value.trim(),
-        telefon: form.telefon.value.trim(),
-        bemerkung: form.bemerkung.value.trim(),
-        elternName: form.elternName.value.trim(),
-        resend: true
-      };
-
-      try {
-        const resp = await fetch("/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData)
-        });
-        const result = await resp.json();
-        codeFeedback.style.display = "block";
-        if (result.ok) {
-          codeFeedback.textContent = "✅ Neuer Code wurde versendet.";
-          codeFeedback.style.background = "#e6ffe6";
-          codeFeedback.style.color = "#006600";
-        } else {
-          codeFeedback.textContent = "❌ " + (result.message || "Fehler beim erneuten Senden.");
-          codeFeedback.style.background = "#ffecec";
-          codeFeedback.style.color = "#660000";
-        }
-      } catch (err) {
-        codeFeedback.style.display = "block";
-        codeFeedback.textContent = "❌ Technischer Fehler beim erneuten Senden.";
-        codeFeedback.style.background = "#ffecec";
-        codeFeedback.style.color = "#660000";
-      }
-    });
-
-  </script>
+  codeFeedback.textContent = result.ok ? "✅ Neuer Code wurde versendet." : "❌ " + (result.message || "Fehler beim erneuten Senden.");
+  codeFeedback.className = result.ok ? "feedback success" : "feedback error";
+  codeFeedback.style.display = "block";
+});
+</script>
 </body>
 </html>
