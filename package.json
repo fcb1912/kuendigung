@@ -1,16 +1,32 @@
 {
   "name": "kuendigung-formular",
   "version": "1.0.0",
+  "description": "Kündigungsformular FC Badenia St. Ilgen mit Bestätigungscode per E-Mail",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
-    "express": "^4.21.2",
-    "nodemailer": "^6.9.0",
-    "uuid": "^9.0.0"
-  }
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "FC Badenia",
+    "Kündigung",
+    "Formular",
+    "Bestätigungscode",
+    "Express",
+    "Brevo"
+  ],
+  "author": "FC Badenia St. Ilgen",
+  "license": "MIT"
 }
