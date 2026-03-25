@@ -116,7 +116,7 @@ app.post("/submit", async (req, res) => {
 
     try {
       await axios.post("https://api.brevo.com/v3/smtp/email", {
-        sender: { email: "mitglieder@fc-badenia-stilgen.de" },
+        sender: { email: "mitglieder@mao.fc-badenia-stilgen.de" },
         to: [{ email }],
         subject: "Ihr Bestätigungscode zur Kündigung",
         htmlContent: emailHtml,
@@ -207,9 +207,9 @@ ${data.bemerkung ? `Bemerkung: ${data.bemerkung}` : ""}
 
     try {
       await axios.post("https://api.brevo.com/v3/smtp/email", {
-        sender: { email: "mitglieder@fc-badenia-stilgen.de" },
+        sender: { email: "mitglieder@mao.fc-badenia-stilgen.de" },
         to: [{ email: data.email }],
-        cc: [{ email: "mitglieder@fc-badenia-stilgen.de" }],
+        cc: [{ email: "mitglieder@mao.fc-badenia-stilgen.de" }],
         subject: `Kündigung eingegangen – ${data.vorname} ${data.nachname}`,
         htmlContent: htmlMail,
         textContent: textMail
